@@ -1,26 +1,35 @@
 import numpy as np
+import pandas as pd
 from keras.models import load_model
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
-# Load model
-model = load_model('model.h5')
+import re
+import pickle
 
-def predict_class(text):
-    '''Function to predict sentiment class of the passed text'''
+# load the trained model
+model = load_model("modelInstagram.h5")
 
-    max_fatures = 2000
-    tokenizer = Tokenizer(num_words=max_fatures, split=' ')
+# load the tokenizer
+tokenizer = Tokenizer(num_words=2000, split=' ')
+with open('tokenizer.pickle', 'rb') as handle:
+    tokenizer = pickle.load(handle)
 
-    text = ['Meetings: Because none of us is as dumb as all of us.']
-    # vectorizing the tweet by the pre-fitted tokenizer instance
-    text = tokenizer.texts_to_sequences(text)
-    # padding the tweet to have exactly the same shape as `embedding_2` input
-    text = pad_sequences(text, maxlen=28, dtype='int32', value=0)
-    print(text)
-    sentiment = model.predict(text, batch_size=1, verbose=2)[0]
-    if (np.argmax(sentiment) == 0):
-        print("negative")
-    elif (np.argmax(sentiment) == 1):
-        print("positive")
+def predict_sentiment(tweet):
+    # preprocess the tweet
+    tweet = tweet.lower()
+    tweet = re.sub('[^a-zA-z0-9\s]', '', tweet)
+    # vectorize the tweet using the pre-fitted tokenizer
+    tweet = tokenizer.texts_to_sequences([tweet])
+    # pad the tweet to have the same shape as the model input
+    tweet = pad_sequences(tweet, maxlen=114, dtype='int32', value=0)
+    print(tweet)
+    # predict the sentiment using the loaded model
+    sentiment = model.predict(tweet, batch_size=1, verbose=2)[0]
+    if np.argmax(sentiment) == 0:
+        return "negative"
+    elif np.argmax(sentiment) == 1:
+        return "positive"
 
-predict_class(['Kmrn termewek2 skr lengket lg duhhh kok labil bgt'])
+tweet = "Kakak Cantik "
+sentiment = predict_sentiment(tweet)
+print(sentiment)
