@@ -2,25 +2,30 @@ import numpy as np
 from keras.models import load_model
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
-
 # Load model
 model = load_model('model.h5')
 
-def predict_class(text):
-    '''Function to predict sentiment class of the passed text'''
 
-    max_fatures = 2000
+def predict(txt):
+    max_fatures = 100
     tokenizer = Tokenizer(num_words=max_fatures, split=' ')
+    tokenizer.fit_on_texts(txt)
+    X = tokenizer.texts_to_sequences(txt)
+    X = pad_sequences(X, maxlen=80)
 
-    # vectorizing the tweet by the pre-fitted tokenizer instance
-    text = tokenizer.texts_to_sequences(text)
-    # padding the tweet to have exactly the same shape as `embedding_2` input
-    text = pad_sequences(text, maxlen=114, dtype='int32', value=0)
-    print(text)
-    sentiment = model.predict(text, batch_size=1, verbose=2)[0]
-    if (np.argmax(sentiment) == 0):
-        print("negative")
-    elif (np.argmax(sentiment) == 1):
-        print("positive")
+    Y_pred = model.predict(X)
 
-predict_class('kamu goblok bgt sih, aku suka kamu padahal')
+    for i in range(len(Y_pred)):
+        if np.argmax(Y_pred[i]) == 0:
+            print('Text:', txt[i], '\nSentiment: Komentar Cyberbulying')
+        else:
+            print('Text:', txt[i], '\nSentiment: Komentar Biasa')
+
+
+txt = [
+    'kebiasaan balajaer nyampah d ig para artis..suka2 yg punya ig lah mau bikin caption apa,kok balajaer yg heboh dan asik ceramahin yg punya ig.tar lama2 d bikinin lagu sm teh melly loh balajaer yg berjudul',
+    'Kamu baik banget deh, boleh ga aku temenan sama kamu',
+    'jangan tolol banget deh jadi orang, sadar diri'
+       ]
+
+predict(txt)
