@@ -37,11 +37,11 @@ X = pad_sequences(X)
 with open('tokenizer.pickle', 'wb') as handle:
     pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-embed_dim = [64,128]
+embed_dim = [32,64,128]
 lstm_out = 196
 
 model = Sequential()
-model.add(Embedding(max_fatures[1], embed_dim[1],input_length = X.shape[1]))
+model.add(Embedding(max_fatures[1], embed_dim[2],input_length = X.shape[1]))
 model.add(SpatialDropout1D(0.4))
 model.add(LSTM(lstm_out, dropout=0.2, recurrent_dropout=0.2))
 model.add(Dense(2,activation='softmax'))
