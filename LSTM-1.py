@@ -23,12 +23,14 @@ data = pd.read_csv('dataset_komentar_instagram_cyberbullying.csv')
 # Keeping only the neccessary columns
 data = data[['Instagram Comment Text','Sentiment']]
 
-data = data[data.Sentiment != "Neutral"]
 data['Instagram Comment Text'] = data['Instagram Comment Text'].apply(lambda x: x.lower())
 data['Instagram Comment Text'] = data['Instagram Comment Text'].apply((lambda x: re.sub('[^a-zA-z0-9\s]', '', x)))
 
-print(data[data['Sentiment'] == 'Positive'].size)
-print(data[data['Sentiment'] == 'Negative'].size)
+negative = data[data['Sentiment'] == 'positive']
+positive = data[data['Sentiment'] == 'negative']
+print("= = = Dataset = = =")
+print("data positive (200 x 2)\t : ", positive.size)
+print("data negative (200 x 2)\t : ", negative.size)
 
 for idx, row in data.iterrows():
     row[0] = row[0].replace('rt', ' ')
@@ -54,12 +56,12 @@ model.compile(loss = 'categorical_crossentropy', optimizer='adam',metrics = ['ac
 print(model.summary())
 
 Y = pd.get_dummies(data['Sentiment']).values
-X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 0.33, random_state = 42)
+X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 0.2, random_state = 42)
 print(X_train.shape,Y_train.shape)
 print(X_test.shape,Y_test.shape)
 
 batch_size = 32
-model.fit(X_train, Y_train, epochs = 7, batch_size=batch_size, verbose = 2)
+model.fit(X_train, Y_train, epochs = 10, batch_size=batch_size, verbose = 2)
 
 validation_size = 20
 
@@ -71,22 +73,22 @@ score,acc = model.evaluate(X_test, Y_test, verbose = 2, batch_size = batch_size)
 print("score: %.2f" % (score))
 print("acc: %.2f" % (acc))
 
-pos_cnt, neg_cnt, pos_correct, neg_correct = 0, 0, 0, 0
-for x in range(len(X_validate)):
+# pos_cnt, neg_cnt, pos_correct, neg_correct = 0, 0, 0, 0
+# for x in range(len(X_validate)):
 
-    result = model.predict(X_validate[x].reshape(1, X_test.shape[1]), batch_size=1, verbose=2)[0]
+#     result = model.predict(X_validate[x].reshape(1, X_test.shape[1]), batch_size=1, verbose=2)[0]
 
-    if np.argmax(result) == np.argmax(Y_validate[x]):
-        if np.argmax(Y_validate[x]) == 0:
-            neg_correct += 1
-        else:
-            pos_correct += 1
+#     if np.argmax(result) == np.argmax(Y_validate[x]):
+#         if np.argmax(Y_validate[x]) == 0:
+#             neg_correct += 1
+#         else:
+#             pos_correct += 1
 
-    if np.argmax(Y_validate[x]) == 0:
-        neg_cnt += 1
-    else:
-        pos_cnt += 1
+#     if np.argmax(Y_validate[x]) == 0:
+#         neg_cnt += 1
+#     else:
+#         pos_cnt += 1
 
-print("pos_acc", pos_correct / pos_cnt * 100, "%")
-print("neg_acc", neg_correct / neg_cnt * 100, "%")
+# print("pos_acc", pos_correct / pos_cnt * 100, "%")
+# print("neg_acc", neg_correct / neg_cnt * 100, "%")
 model.save("modelInstagram.h5")
