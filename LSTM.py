@@ -30,7 +30,7 @@ positive = data[data['Sentiment'] == 'negative']
 print("data positive \t : ", positive.size)
 print("data negative \t : ", negative.size)
 
-max_fatures = 400
+max_fatures = 2000
 tokenizer = Tokenizer(num_words=max_fatures, split=' ')
 tokenizer.fit_on_texts(data['Instagram Comment Text'].values)
 X = tokenizer.texts_to_sequences(data['Instagram Comment Text'].values)
@@ -53,7 +53,7 @@ print(X_train.shape, Y_train.shape)
 print(X_test.shape, Y_test.shape)
 
 batch_size = 32
-history = model.fit(X_train, Y_train, epochs=20, batch_size=batch_size, verbose=2)
+history = model.fit(X_train, Y_train, epochs=7, batch_size=batch_size, verbose=2)
 
 # plt.plot(history.history['accuracy'])
 # plt.title('Model Accuracy')

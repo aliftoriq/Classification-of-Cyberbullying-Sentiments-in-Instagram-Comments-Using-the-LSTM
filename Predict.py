@@ -25,14 +25,15 @@ def predict(txt):
     # predict the sentiment using the loaded model
     sentiment = model.predict(txt, batch_size=1, verbose=2)[0]
     if np.argmax(sentiment) == 0:
-        text = "Text:"+ tempTxt + "\nSentiment: Komentar Cyberbulying"
+        text = "Text: "+ tempTxt + "\nSentiment: Komentar Cyberbulying"
         return text
     else:
-        text = "Text:"+ tempTxt + "\nSentiment: Komentar Biasa"
+        text = "Text: "+ tempTxt + "\nSentiment: Komentar Biasa"
         return text
     
 
 txt = 'jangan tolol banget deh jadi orang, sadar diri'
+txt = 'Kamu baik banget deh, boleh ga aku temenan sama kamu'
 
 print(predict(txt))
 
