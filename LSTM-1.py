@@ -14,6 +14,7 @@ from keras.layers import Dense, Embedding, LSTM, SpatialDropout1D
 from sklearn.model_selection import train_test_split
 from keras.utils.np_utils import to_categorical
 import pickle
+import matplotlib.pyplot as plt
 import re
 
 # Input data files are available in the "../input/" directory.
@@ -61,7 +62,14 @@ print(X_train.shape,Y_train.shape)
 print(X_test.shape,Y_test.shape)
 
 batch_size = 32
-model.fit(X_train, Y_train, epochs = 10, batch_size=batch_size, verbose = 2)
+history = model.fit(X_train, Y_train, epochs = 10, batch_size=batch_size, verbose = 2)
+
+plt.plot(history.history['accuracy'])
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
 validation_size = 20
 
