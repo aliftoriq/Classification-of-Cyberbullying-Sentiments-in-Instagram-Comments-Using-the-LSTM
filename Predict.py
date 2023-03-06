@@ -5,22 +5,22 @@ from keras.utils import pad_sequences
 import re
 import pickle
 
-# load the trained model
+# load model
 model = load_model("modelInstagram.h5")
 
-# load the tokenizer
+# load tokenizer
 tokenizer = Tokenizer(num_words=2000, split=' ')
 with open('tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
 
 def predict(txt):
     tempTxt = txt
-    # preprocess the tweet
+    # preprocess txt
     txt = txt.lower()
     txt = re.sub('[^a-zA-z0-9\s]', '', txt)
-    # vectorize the tweet using the pre-fitted tokenizer
+    # vectorize the txt using the pre-fitted tokenizer
     txt = tokenizer.texts_to_sequences([txt])
-    # pad the tweet to have the same shape as the model input
+    # pad the txt to have the same shape as the model input
     txt = pad_sequences(txt, maxlen=114, dtype='int32', value=0)
     # predict the sentiment using the loaded model
     sentiment = model.predict(txt, batch_size=1, verbose=2)[0]
@@ -33,7 +33,7 @@ def predict(txt):
     
 
 txt = 'jangan tolol banget deh jadi orang, sadar diri'
-txt = 'Kamu baik banget deh, boleh ga aku temenan sama kamu'
+# txt = 'Kamu baik banget deh, boleh ga aku temenan sama kamu'
 
 print(predict(txt))
 
