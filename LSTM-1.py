@@ -1,8 +1,3 @@
-
-# This Python 3 environment comes with many helpful analytics libraries installed
-# It is defined by the kaggle/python docker image: https://github.com/kaggle/docker-python
-# For example, here's several helpful packages to load in
-
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 
@@ -17,11 +12,8 @@ import pickle
 import matplotlib.pyplot as plt
 import re
 
-# Input data files are available in the "../input/" directory.
-# For example, running this (by clicking run or pressing Shift+Enter) will list the files in the input directory
-
 data = pd.read_csv('dataset_komentar_instagram_cyberbullying.csv')
-# Keeping only the neccessary columns
+# Mengambil column yang dibutuhkan
 data = data[['Instagram Comment Text','Sentiment']]
 
 data['Instagram Comment Text'] = data['Instagram Comment Text'].apply(lambda x: x.lower())
@@ -41,7 +33,7 @@ tokenizer = Tokenizer(num_words=max_fatures[1], split=' ')
 tokenizer.fit_on_texts(data['Instagram Comment Text'].values)
 X = tokenizer.texts_to_sequences(data['Instagram Comment Text'].values)
 X = pad_sequences(X)
-# save the tokenizer object to a file
+# Menyimpan file tokenizer
 with open('tokenizer.pickle', 'wb') as handle:
     pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -81,23 +73,5 @@ plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
-image.png
-# pos_cnt, neg_cnt, pos_correct, neg_correct = 0, 0, 0, 0
-# for x in range(len(X_validate)):
 
-#     result = model.predict(X_validate[x].reshape(1, X_test.shape[1]), batch_size=1, verbose=2)[0]
-
-#     if np.argmax(result) == np.argmax(Y_validate[x]):
-#         if np.argmax(Y_validate[x]) == 0:
-#             neg_correct += 1
-#         else:
-#             pos_correct += 1
-
-#     if np.argmax(Y_validate[x]) == 0:
-#         neg_cnt += 1
-#     else:
-#         pos_cnt += 1
-
-# print("pos_acc", pos_correct / pos_cnt * 100, "%")
-# print("neg_acc", neg_correct / neg_cnt * 100, "%")
 model.save("modelInstagram.h5")
