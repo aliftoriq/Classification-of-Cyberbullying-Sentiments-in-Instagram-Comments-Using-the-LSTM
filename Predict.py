@@ -32,13 +32,11 @@ def predict(txt):
         return text
     
 
-txt = 'jangan tolol banget deh jadi orang, sadar diri'
+# txt = 'jangan tolol banget deh jadi orang, sadar diri'
 # txt = 'Kamu baik banget deh, boleh ga aku temenan sama kamu'
-txt = 'sebenrnya kamutuh baik, tapi kenapasih kamu sering nyusahin orang, parasit'
+txt = 'sebenrnya kamutuh baik, tapi kenapasih kamu sering nyusahin orang, dasar parasit gaguna, goblok'
 
 print(predict(txt))
-
-
 
 
 
