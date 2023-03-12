@@ -1,5 +1,8 @@
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import tensorflow as tf
+import random as rn
+import os
 
 from sklearn.feature_extraction.text import CountVectorizer
 from keras.preprocessing.text import Tokenizer
@@ -11,6 +14,16 @@ from keras.utils.np_utils import to_categorical
 import pickle
 import matplotlib.pyplot as plt
 import re
+
+# Set random seed values
+np.random.seed(42)
+rn.seed(42)
+tf.random.set_seed(42)
+
+# Set environment variables for reproducibility
+os.environ['PYTHONHASHSEED'] = '0'
+os.environ['TF_DETERMINISTIC_OPS'] = '1'
+os.environ['OMP_NUM_THREADS'] = '1'
 
 data = pd.read_csv('dataset_komentar_instagram_cyberbullying.csv')
 # Mengambil column yang dibutuhkan
@@ -49,7 +62,7 @@ model.compile(loss = 'categorical_crossentropy', optimizer='adam',metrics = ['ac
 print(model.summary())
 
 Y = pd.get_dummies(data['Sentiment']).values
-X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 0.2, random_state = 42)
+X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 0.2, random_state=42, shuffle=True)
 print(X_train.shape,Y_train.shape)
 print(X_test.shape,Y_test.shape)
 

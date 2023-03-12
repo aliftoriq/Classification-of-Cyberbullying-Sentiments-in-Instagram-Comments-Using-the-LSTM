@@ -34,7 +34,7 @@ def predict(txt):
 
 # txt = 'jangan tolol banget deh jadi orang, sadar diri'
 # txt = 'Kamu baik banget deh, boleh ga aku temenan sama kamu'
-txt = 'sebenrnya kamutuh baik, tapi kenapasih kamu sering nyusahin orang, dasar parasit gaguna, goblok'
+txt = 'sebenrnya kamutuh baik, tapi kenapasih kamu sering nyusahin orang'
 
 print(predict(txt))
 
